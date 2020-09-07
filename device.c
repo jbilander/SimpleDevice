@@ -146,11 +146,11 @@ static void __attribute__((used)) open(struct Library *dev asm("a6"), struct IOR
     if (!is_open)
     {
         //initialize and open here
-        /* 
-        xyz_initialize();
-		if (xy_open() != 0)
-			return;
-        */
+
+        //xyz_initialize();
+        //if (xy_open() != 0)
+        //	return;
+
         is_open = TRUE;
     }
 
