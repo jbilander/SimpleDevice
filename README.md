@@ -8,13 +8,15 @@ The `Makefile` is made to work with both `Bebbo's amiga-gcc toolchain` as well a
 The Makfile is set to delete and recompile the executable if any source files `(%.c or %.s)` have been touched before running `make`. Just comment out the `@$(DEL_EXE)` on both `%.c and %.s` if you don't want it to work this way.
 ***
 ### Some screenshots:
-On Windows with MSYS2: <br /><br />
+On Windows with MSYS2:
+<br />
 <a href="images/VSCode_on_windows_with_MSYS2.jpg">
 <img src="images/VSCode_on_windows_with_MSYS2.jpg" width="577" height="366">
 </a>
 <br />
 
-On Linux Mint: <br /><br />
+On Linux Mint:
+<br />
 <a href="images/VSCode_on_linux.jpg">
 <img src="images/VSCode_on_linux.jpg" width="577" height="369">
 </a>
@@ -31,7 +33,7 @@ On Linux Mint: <br /><br />
 ***
 
 ### "Debug" with KPrintF in methods running in Forbidden mode by Exec:
-As you might know `Init_Device/Open/Close/Expunge` runs single threaded by Exec, no other task is allowed to run in this mode so no writing to a dos-console possible as it would mean deadlock, however with the `debug.lib (libdebug.a)` linked into our build it is possible to get KPrintF-statements out to the serial port terminal. Good thing is WinUAE has an option to emulate the serial terminal of the Amiga and then we can use telnet to connect to it with the command `telnet localhost 1234`
+As you might know `Init_Device/Open/Close/Expunge` runs single threaded by Exec, no other task is allowed to run in this mode so no writing to a dos-console possible as it would mean deadlock to occur, however with the `debug.lib (libdebug.a)` linked into our build (with `-ldebug -mcrt=clib2`) it is possible to get `KPrintF`-statements out to the serial port terminal. Good thing is WinUAE has an option to emulate the serial terminal of the Amiga and then we can use telnet to connect to it with the command `telnet localhost 1234`
 
 Enable WinUAE serial port on 1234, and open a cmd-prompt and write the telnet command (obviously you'll need telnet installed first via `Control Panel->Program and Features->Turn windows features on/off)`.
 <br />
@@ -56,8 +58,22 @@ With dopus on the Amiga you can copy the simple.device into devs.
 <img src="images/copy_driver_to_devs_with_dopus.jpg" width="577" height="493">
 </a>
 ***
-To load the device we need a device list with the Device name pointing to our simple.device, I'll use a SD0 file made in Devs here as a dummy to see if it is working to load the driver, Exec will scan for a romtag in our file:
+To load the device we need a device list with the Device entry pointing to our name of the file `simple.device`, I'll use a `SD0`-file here made in `Devs` s a dummy to see if it will work to load the driver, Exec will scan for a romtag in our file:
 <br /><br />
 <a href="images/mapping_device_name_in device_list.jpg">
 <img src="images/mapping_device_name_in device_list.jpg" width="577" height="493">
 </a>
+***
+And with telnet connected and running by double-clicking the `SD0`-file it is indeed showing `KPrintF`-output on the serial console...yay!
+<br /><br />
+<a href="images/telnet_kprintf_output.jpg">
+<img src="images/telnet_kprintf_output.jpg" width="577" height="418">
+</a>
+***
+In the disassembly we can also se that the romtag is created correctly after `moveq #-1,d0` `rts` as it should be:
+<br /><br />
+<a href="images/disassembly_screenshot.jpg">
+<img src="images/disassembly_screenshot.jpg" width="577" height="364">
+</a>
+***
+That's all folks!, Happy Amiga Hackin'
