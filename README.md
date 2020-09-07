@@ -20,7 +20,22 @@ On Linux Mint:
 <a href="images/VSCode_on_linux.jpg">
 <img src="images/VSCode_on_linux.jpg" width="577" height="369">
 </a>
-
+***
+`settings.json` in .vscode for linux would be something like this:
+```
+   {
+      "terminal.integrated.env.linux": {
+        "PATH": "/opt/amiga/bin:${env:PATH}"
+      },
+   }
+```
+and `c_cpp_properties.json` something like this:
+```
+"includePath": [
+    "${workspaceFolder}/**","/opt/amiga/m68k-amigaos/ndk-include"
+],
+"compilerPath": "/opt/amiga/bin/m68k-amigaos-gcc.exe",
+```
 ***
 
 ### Make commands:
