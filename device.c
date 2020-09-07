@@ -13,7 +13,7 @@
 
 #define DEVICE_NAME "simple.device"
 #define DEVICE_DATE "(1 Sep 2020)"
-#define DEVICE_ID_STRING "simple "XSTR(DEVICE_VERSION)"."XSTR(DEVICE_REVISION)" "DEVICE_DATE /* format is: 'name version.revision (d.m.yy)' */
+#define DEVICE_ID_STRING "simple " XSTR(DEVICE_VERSION) "." XSTR(DEVICE_REVISION) " " DEVICE_DATE /* format is: 'name version.revision (d.m.yy)' */
 #define DEVICE_VERSION 1
 #define DEVICE_REVISION 0
 #define DEVICE_PRIORITY 0 /* Most people will not need a priority and should leave it at zero. */
@@ -54,13 +54,11 @@ asm("romtag:                                \n"
     "       dc.b    "XSTR(DEVICE_PRIORITY)" \n"
     "       dc.l    _device_name            \n"
     "       dc.l    _device_id_string       \n"
-    "       dc.l	_auto_init_tables       \n"
+    "       dc.l    _auto_init_tables       \n"
     "endcode:                               \n");
-
 
 char device_name[] = DEVICE_NAME;
 char device_id_string[] = DEVICE_ID_STRING;
-
 
 /*------- init_device ---------------------------------------
 FOR RTF_AUTOINIT:
@@ -81,14 +79,14 @@ CAUTION:
 This function runs in a forbidden state !!!                   
 This call is single-threaded by Exec
 ------------------------------------------------------------*/
-static struct Library __attribute__((used)) *init_device(BPTR seg_list asm("a0"), struct Library *dev asm("d0"))
+static struct Library __attribute__((used)) * init_device(BPTR seg_list asm("a0"), struct Library *dev asm("d0"))
 {
-    #if DEBUG
-    KPrintF((CONST_STRPTR)"running init_device()\n");
-    #endif
+#if DEBUG
+    KPrintF((CONST_STRPTR) "running init_device()\n");
+#endif
 
     /* !!! required !!! save a pointer to exec */
-	SysBase = *(struct ExecBase **)4UL;
+    SysBase = *(struct ExecBase **)4UL;
 
     /* save pointer to our loaded code (the SegList) */
     saved_seg_list = seg_list;
@@ -111,22 +109,22 @@ This call is guaranteed to be single-threaded; only one task
 will execute your Expunge at a time. */
 static BPTR __attribute__((used)) expunge(struct Library *dev asm("a6"))
 {
-    #if DEBUG
-    KPrintF((CONST_STRPTR)"running expunge()\n");
-    #endif
+#if DEBUG
+    KPrintF((CONST_STRPTR) "running expunge()\n");
+#endif
 
     if (dev->lib_OpenCnt != 0)
-	{
-		dev->lib_Flags |= LIBF_DELEXP;
-		return 0;
-	}
+    {
+        dev->lib_Flags |= LIBF_DELEXP;
+        return 0;
+    }
 
-	//xyz_shutdown();
+    //xyz_shutdown();
 
-	BPTR seg_list = saved_seg_list;
-	Remove(&dev->lib_Node);
-	FreeMem((char *)dev - dev->lib_NegSize, dev->lib_NegSize + dev->lib_PosSize);
-	return seg_list;
+    BPTR seg_list = saved_seg_list;
+    Remove(&dev->lib_Node);
+    FreeMem((char *)dev - dev->lib_NegSize, dev->lib_NegSize + dev->lib_PosSize);
+    return seg_list;
 }
 
 /* device dependent open function 
@@ -135,29 +133,29 @@ This call is guaranteed to be single-threaded; only one task
 will execute your Open at a time. */
 static void __attribute__((used)) open(struct Library *dev asm("a6"), struct IORequest *ioreq asm("a1"), ULONG unitnum asm("d0"), ULONG flags asm("d1"))
 {
-    #if DEBUG
-    KPrintF((CONST_STRPTR)"running open()\n");
-    #endif
+#if DEBUG
+    KPrintF((CONST_STRPTR) "running open()\n");
+#endif
 
     ioreq->io_Error = IOERR_OPENFAIL;
-	ioreq->io_Message.mn_Node.ln_Type = NT_REPLYMSG;
+    ioreq->io_Message.mn_Node.ln_Type = NT_REPLYMSG;
 
-	if (unitnum != 0)
-		return;
+    if (unitnum != 0)
+        return;
 
-	if (!is_open)
-	{
+    if (!is_open)
+    {
         //initialize and open here
-		/* 
+        /* 
         xyz_initialize();
 		if (xy_open() != 0)
 			return;
         */
-		is_open = TRUE;
-	}
+        is_open = TRUE;
+    }
 
-	dev->lib_OpenCnt++;
-	ioreq->io_Error = 0; //Success
+    dev->lib_OpenCnt++;
+    ioreq->io_Error = 0; //Success
 }
 
 /* device dependent close function 
@@ -166,35 +164,35 @@ This call is guaranteed to be single-threaded; only one task
 will execute your Close at a time. */
 static BPTR __attribute__((used)) close(struct Library *dev asm("a6"), struct IORequest *ioreq asm("a1"))
 {
-    #if DEBUG
-    KPrintF((CONST_STRPTR)"running close()\n");
-    #endif
+#if DEBUG
+    KPrintF((CONST_STRPTR) "running close()\n");
+#endif
 
     ioreq->io_Device = NULL;
-	ioreq->io_Unit = NULL;
+    ioreq->io_Unit = NULL;
 
-	dev->lib_OpenCnt--;
+    dev->lib_OpenCnt--;
 
-	if (dev->lib_OpenCnt == 0 && (dev->lib_Flags & LIBF_DELEXP))
-		return expunge(dev);
+    if (dev->lib_OpenCnt == 0 && (dev->lib_Flags & LIBF_DELEXP))
+        return expunge(dev);
 
-	return 0;
+    return 0;
 }
 
 /* device dependent beginio function */
 static void __attribute__((used)) begin_io(struct Library *dev asm("a6"), struct IORequest *ioreq asm("a1"))
 {
-    #if DEBUG
-    KPrintF((CONST_STRPTR)"running begin_io()\n");
-    #endif
+#if DEBUG
+    KPrintF((CONST_STRPTR) "running begin_io()\n");
+#endif
 }
 
 /* device dependent abortio function */
 static ULONG __attribute__((used)) abort_io(struct Library *dev asm("a6"), struct IORequest *ioreq asm("a1"))
 {
-    #if DEBUG
-    KPrintF((CONST_STRPTR)"running abort_io()\n");
-    #endif
+#if DEBUG
+    KPrintF((CONST_STRPTR) "running abort_io()\n");
+#endif
 
     return IOERR_NOCMD;
 }
