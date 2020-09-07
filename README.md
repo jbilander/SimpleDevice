@@ -39,8 +39,8 @@ and `c_cpp_properties.json` something like this:
 ***
 
 ### Make commands:
-* build debug: `make debug`  (This created a folder `build-debug` with all the built files in it, compiles with debug-flags set)
-* build release: `make`  (This created a folder `build-release` with all the built files in it, compiles with release-flags set)
+* build debug: `make debug`  (This creates a folder `build-debug` with all the build-files in it, compiles with debug-flags set)
+* build release: `make`  (This creates a folder `build-release` with all the build-files in it, compiles with release-flags set)
 * clean debug: `make cleandebug`
 * clean release: `make cleanrelease`
 * clean both: `make clean`
