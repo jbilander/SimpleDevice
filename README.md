@@ -1,5 +1,5 @@
 # Amiga SimpleDevice
-Amiga Simple Device skel in C using Bebbo's or Bartman's gcc.
+Amiga Simple Device driver skel in C using Bebbo's or Bartman's gcc.
 ***
 This example shows you how to build a simple device driver for the Amiga in C with a modern cross compile gcc-toolchain for the Amiga using VSCode as IDE. Driver should work with 1.3 and above. I haven't tested with older versions.
 ***
@@ -63,7 +63,7 @@ For conveniency, do also map the Project folder in WinUAE so we easily can copy 
 <img src="images/project_folder_mapped_as_drive_in_WinUAE.jpg" width="577" height="432">
 </a>
 ***
-With dopus on the Amiga you can copy the simple.device into devs.
+With dopus on the Amiga you can copy the `simple.device` into `devs`.
 <br /><br />
 <a href="images/project_folder_shown_in_dopus.jpg">
 <img src="images/project_folder_shown_in_dopus.jpg" width="577" height="493">
