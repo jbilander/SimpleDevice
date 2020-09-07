@@ -1,0 +1,14 @@
+{
+    "telemetry.enableCrashReporter": false,
+    "telemetry.enableTelemetry": false,
+    "terminal.integrated.shell.windows": "C:\\msys64\\usr\\bin\\bash.exe",
+    "terminal.integrated.shellArgs.windows": [
+        "--login",
+    ],
+    "terminal.integrated.env.windows": {
+        "CHERE_INVOKING": "1",
+        "MSYSTEM": "MINGW64",
+        "MSYS2_PATH_TYPE": "inherit",
+        "PATH": "/c/msys64/opt/amiga/bin:/c/Users/Jorgen/.vscode/extensions/bartmanabyss.amiga-debug-1.1.0-preview31/bin:/c/Users/Jorgen/.vscode/extensions/bartmanabyss.amiga-debug-1.1.0-preview31/bin/opt/bin",
+    },
+}

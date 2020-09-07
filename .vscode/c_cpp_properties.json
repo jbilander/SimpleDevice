@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Amiga",
+            "includePath": [
+                //paths for the IntelliSense engine to use while searching for included headers.
+                "${workspaceFolder}/**","C:\\msys64\\opt\\amiga\\m68k-amigaos\\ndk-include"
+                //"C:\\msys64\\opt\\amiga\\m68k-amigaos\\ndk13-include"
+                //"C:\\Users\\Jorgen\\.vscode\\extensions\\bartmanabyss.amiga-debug-1.1.0-preview31\\bin\\opt\\m68k-amiga-elf\\sys-include"
+            ],
+            "defines": [
+                //"__GNUC__=8",
+                "__GNUC__=6",
+                "_NO_INLINE"
+            ],
+            //Full path of the compiler being used to enable more accurate IntelliSense.
+            "compilerPath": "C:\\msys64\\opt\\amiga\\bin\\m68k-amigaos-gcc.exe",
+            //"compilerPath": "C:\\Users\\Jorgen\\.vscode\\extensions\\bartmanabyss.amiga-debug-1.1.0-preview31\\bin\\opt\\bin\\m68k-amiga-elf-gcc.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}
