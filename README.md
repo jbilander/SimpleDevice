@@ -8,13 +8,13 @@ The `Makefile` is made to work with both `Bebbo's amiga-gcc toolchain` as well a
 The Makfile is set to delete and recompile the executable if any source files `(%.c or %.s)` have been touched before running `make`. Just comment out the `@$(DEL_EXE)` on both `%.c and %.s` if you don't want it to work this way.
 ***
 ### Some screenshots:
-On Windows with MSYS2: <br />
+On Windows with MSYS2: <br /><br />
 <a href="images/VSCode_on_windows_with_MSYS2.jpg">
 <img src="images/VSCode_on_windows_with_MSYS2.jpg" width="577" height="366">
 </a>
 <br />
 
-On Linux Mint: <br />
+On Linux Mint: <br /><br />
 <a href="images/VSCode_on_linux.jpg">
 <img src="images/VSCode_on_linux.jpg" width="577" height="369">
 </a>
@@ -41,17 +41,23 @@ Enable WinUAE serial port on 1234, and open a cmd-prompt and write the telnet co
 </a>
 ***
 For conveniency, do also map the Project folder in WinUAE so we easily can copy our newly built device driver over to the emulated Amiga:
-<br />
+<br /><br />
 <a href="images/project_folder_mapped_as_drive_in_WinUAE.jpg">
 <img src="images/project_folder_mapped_as_drive_in_WinUAE.jpg" width="577" height="432">
 </a>
 ***
 With dopus on the Amiga you can copy the simple.device into devs.
-<br />
+<br /><br />
 <a href="images/project_folder_shown_in_dopus.jpg">
 <img src="images/project_folder_shown_in_dopus.jpg" width="577" height="493">
 </a>
-<br />
+<br /><br />
 <a href="images/copy_driver_to_devs_with_dopus.jpg">
 <img src="images/copy_driver_to_devs_with_dopus.jpg" width="577" height="493">
-  
+</a>
+***
+To load the device we need a device list with the Device name pointing to our simple.device, I'll use a SD0 file made in Devs here as a dummy to see if it is working to load the driver, Exec will scan for a romtag in our file:
+<br /><br />
+<a href="images/mapping_device_name_in device_list.jpg">
+<img src="images/mapping_device_name_in device_list.jpg" width="577" height="493">
+</a>
