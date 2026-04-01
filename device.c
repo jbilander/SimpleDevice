@@ -52,9 +52,9 @@ asm("romtag:                                \n"
     "       dc.b    "XSTR(DEVICE_VERSION)"  \n"
     "       dc.b    "XSTR(NT_DEVICE)"       \n"
     "       dc.b    "XSTR(DEVICE_PRIORITY)" \n"
-    "       dc.l    _device_name            \n"
-    "       dc.l    _device_id_string       \n"
-    "       dc.l    _auto_init_tables       \n"
+    "       dc.l    device_name             \n"
+    "       dc.l    device_id_string        \n"
+    "       dc.l    auto_init_tables        \n"
     "endcode:                               \n");
 
 char device_name[] = DEVICE_NAME;

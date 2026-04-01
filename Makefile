@@ -4,10 +4,11 @@ DEBUGDIR=build-debug
 OBJECTS=device.o
 
 SRCDIRS=.
-INCDIRS=.
+#INCDIRS=.
+INCDIRS=. $(HOME)/AMIGA_GCC/NDK_3.2_elf/sys-include
 
-#TARGET = elf-toolchain
-TARGET = hunk-toolchain
+TARGET = elf-toolchain
+#TARGET = hunk-toolchain
 
 ifeq ($(MAKECMDGOALS), debug)
  DIR=$(DEBUGDIR)
