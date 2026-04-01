@@ -3,9 +3,15 @@ Amiga Simple Device driver skel in C using Bebbo's or Bartman's gcc.
 ***
 This example shows you how to build a simple device driver for the Amiga in C with a modern cross compile gcc-toolchain for the Amiga using VSCode as IDE. Driver should work with 1.3 and above. I haven't tested with older versions.
 ***
-The `Makefile` is made to work with both `Bebbo's amiga-gcc toolchain` as well as `Bartman^Abyss' amiga-elf gcc toolchain`. Currently it is set by default to Bebbo's toolchain, but you can easily switch by commenting out `hunk-toolchain` and uncomment `elf-toolchain` in the Makefile. Obviously you need to install "your" prefered toolchain for it to work and set the correct path to compiler and some settings in .vscode for intellisense and compilation to work. The Makefile should also work with Bartman's `gnumake.exe` running natively on Windows as well as `make` working on MSYS2 and on Linux. The `device.c` is only made to compile with Bebbo's toolchain since it is using register assignments to function parameters, no such thing exists in the elf-toolchain but you can work around it using inline asm should you want to try out building with the elf-toolchain instead. The `Makefile` is also set to automatically disassemble the build so that the assembly generated can easily be inspected. If you are using the elf-toolchain and have Bebbo's toolchain installed as well you can uncomment the `m68k-amigaos-objdump -D $(DIR)/$(FILENAME) > $(DIR)/$(FILENAME).s` line and you will have an disassembly of the executable hunk-file generated after the `elf2hunk` step as well.
+The `Makefile` is made to work with both `Bebbo's amiga-gcc toolchain` as well as `Bartman^Abyss' amiga-elf gcc toolchain`. Currently it is set by default to Bebbo's toolchain, but you can easily switch by commenting out `hunk-toolchain` and uncomment `elf-toolchain` in the Makefile. Obviously you need to install "your" preferred toolchain for it to work and set the correct path to compiler and some settings in .vscode for intellisense and compilation to work. The Makefile should also work with Bartman's `gnumake.exe` running natively on Windows as well as `make` working on MSYS2 and on Linux. The `Makefile` is also set to automatically disassemble the build so that the assembly generated can easily be inspected. If you are using the elf-toolchain and have Bebbo's toolchain installed as well you can uncomment the `m68k-amigaos-objdump -D $(DIR)/$(FILENAME) > $(DIR)/$(FILENAME).s` line and you will have a disassembly of the executable hunk-file generated after the `elf2hunk` step as well.
+
+### Register parameters with the elf-toolchain
+
+`device.c` uses register assignments on function parameters (e.g. `asm("a6")`, `asm("d0")`) which is required by the AmigaOS device driver calling convention. This is now supported in the Bartman elf-toolchain by applying `gcc-regparm.patch` from [jbilander/vscode-amiga-debug](https://github.com/jbilander/vscode-amiga-debug). See that repository's `BUILDING_LINUX.md` for full build instructions. A PR with this patch has been submitted upstream: [BartmanAbyss/vscode-amiga-debug#299](https://github.com/BartmanAbyss/vscode-amiga-debug/pull/299).
+
+Once the patch is applied, `device.c` compiles with both toolchains without any modifications.
 ***
-The Makfile is set to delete and recompile the executable if any source files `(%.c or %.s)` have been touched before running `make`. Just comment out the `@$(DEL_EXE)` on both `%.c and %.s` if you don't want it to work this way.
+The Makefile is set to delete and recompile the executable if any source files `(%.c or %.s)` have been touched before running `make`. Just comment out the `@$(DEL_EXE)` on both `%.c and %.s` if you don't want it to work this way.
 ***
 ### Some screenshots:
 On Windows with MSYS2:
@@ -50,7 +56,11 @@ and `c_cpp_properties.json` something like this:
 ### "Debug" with KPrintF in methods running in Forbidden mode by Exec:
 As you might know `Init_Device/Open/Close/Expunge` runs single threaded by Exec, no other task is allowed to run in this mode so no writing to a dos-console possible as it would mean deadlock to occur, however with the `debug.lib (libdebug.a)` linked into our build (with `-ldebug -mcrt=clib2`) it is possible to get `KPrintF`-statements out on the serial port terminal. Good thing is WinUAE has an option to emulate the serial terminal of the Amiga and then we can use telnet to connect to it with the command `telnet localhost 1234`
 
-Enable WinUAE serial port on 1234, and open a cmd-prompt and write the telnet command (obviously you'll need telnet installed first via `Control Panel->Program and Features->Turn windows features on/off)`.
+**With Bebbo's toolchain** this works out of the box via `-ldebug -mcrt=clib2`.
+
+**With Bartman's elf-toolchain** the `proto/` inline stubs in the standard NDK generate incorrect library call code with GCC 15.x. The solution is to use the NDK 3.2R4 headers from [jbilander/vscode-amiga-debug](https://github.com/jbilander/vscode-amiga-debug) under `ndk32r4/sys-include/` — these were regenerated from the official NDK 3.2R4 SFD files and work correctly with GCC 15.x, generating proper `jsr -N(a6)` calls. A PR updating the bundled headers has been submitted upstream: [BartmanAbyss/vscode-amiga-debug#300](https://github.com/BartmanAbyss/vscode-amiga-debug/pull/300).
+
+Enable WinUAE serial port on 1234, and open a cmd-prompt and write the telnet command (obviously you'll need telnet installed first via `Control Panel->Program and Features->Turn windows features on/off`).
 <br />
 <br />
 <a href="images/telnet_to_WinUAE_emulated_serial_port.jpg">
@@ -85,7 +95,7 @@ And with telnet connected and running by double-clicking the `SD0`-file it is in
 <img src="images/telnet_kprintf_output.jpg" width="577" height="418">
 </a>
 ***
-In the disassembly we can also se that the romtag is created correctly after `moveq #-1,d0` `rts` as it should be:
+In the disassembly we can also see that the romtag is created correctly after `moveq #-1,d0` `rts` as it should be:
 <br /><br />
 <a href="images/disassembly_screenshot.jpg">
 <img src="images/disassembly_screenshot.jpg" width="577" height="364">
